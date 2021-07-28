@@ -1,11 +1,12 @@
+from google.protobuf.symbol_database import Default
 import pandas as pd
 import seaborn as sn
 import matplotlib.pyplot as plt
 
 
-def catplot(df,x,y,kind,title,hue=None,palette='Set3',xlabel=None,ylabel=None):
+def catplot(df,x,y,kind,title,hue=None,palette='Set3',xlabel=None,ylabel=None,size=Default):
     plt.figure(figsize=(12, 7))
-    ax = sn.catplot(data=df,x=x,y=y,hue=hue,kind=kind, palette=palette)
+    ax = sn.catplot(data=df,x=x,y=y,hue=hue,kind=kind, palette=palette,size=size)
     ax.set(xlabel=xlabel, ylabel=ylabel)
     plt.title(title)
     plt.show()
@@ -35,8 +36,14 @@ def correlation_heatmap(corr):
     horizontalalignment='right'
 )
 
-def lineplot(df,x=None,y=None,title=None):
-    plt.figure(figsize=(12, 7))
+def lineplot(df,x=None,y=None,title=None,size=None,w_size=10,h_size=7):
+    plt.figure(figsize=(w_size, h_size))
     sn.lineplot(data=df, x=x, y=y)
+    plt.title(title)
+    plt.show()
+
+def displot(df,x=None,title=None):
+    plt.figure(figsize=(12, 7))
+    sn.displot(data=df, x=x)
     plt.title(title)
     plt.show()
