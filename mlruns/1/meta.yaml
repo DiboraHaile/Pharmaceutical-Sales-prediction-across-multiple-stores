@@ -1,0 +1,4 @@
+artifact_location: file:///home/dibora/Pharmaceutical-Sales-prediction-across-multiple-stores/mlruns/1
+experiment_id: '1'
+lifecycle_stage: active
+name: pharmaceutical
