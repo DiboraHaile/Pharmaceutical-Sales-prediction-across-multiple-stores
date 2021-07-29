@@ -4,22 +4,22 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 
 
-def catplot(df,x,y,kind,title,hue=None,palette='Set3',xlabel=None,ylabel=None,w_size=12,h_size=7):
+def catplot(df,x,y,kind,title,hue=None,palette='Set3',xlabel=None,ylabel=None,w_size=12,h_size=7,size=None):
     plt.figure(figsize=(w_size, h_size))
-    ax = sn.catplot(data=df,x=x,y=y,hue=hue,kind=kind, palette=palette)
+    ax = sn.catplot(data=df,x=x,y=y,hue=hue,kind=kind, palette=palette,size=size)
     ax.set(xlabel=xlabel, ylabel=ylabel)
     plt.title(title)
     plt.show()
 
-def scatterplot(df,x,y,title,hue=None,style=None,w_size=12,h_size=7):
+def scatterplot(df,x,y,title,hue=None,style=None,w_size=12,h_size=7,size=None):
     plt.figure(figsize=(w_size, h_size))
-    sn.scatterplot(data=df, x=x, y=y, hue=hue, style=style)
+    sn.scatterplot(data=df, x=x, y=y, hue=hue, style=style,size=size)
     plt.title(title,fontsize=23)
     plt.show()
 
-def histplot(df,x,y,title,hue=None,palette='Set2',w_size=12,h_size=7):
+def histplot(df,x,y,title,hue=None,palette='Set2',w_size=12,h_size=7,size=None):
     plt.figure(figsize=(w_size, h_size))
-    sn.distplot(data=df,x=x,y=y,hue=hue,palette=palette)
+    sn.distplot(data=df,x=x,y=y,hue=hue,palette=palette,size=size)
     plt.title(title)
     plt.show()
 
@@ -36,14 +36,14 @@ def correlation_heatmap(corr):
     horizontalalignment='right'
 )
 
-def lineplot(df,x=None,y=None,title=None,size=None,w_size=12,h_size=7):
+def lineplot(df,x=None,y=None,title=None,w_size=12,h_size=7,size=None):
     plt.figure(figsize=(w_size, h_size))
-    sn.lineplot(data=df, x=x, y=y)
+    sn.lineplot(data=df, x=x, y=y,size=size)
     plt.title(title)
     plt.show()
 
-def displot(df,x=None,title=None,w_size=12,h_size=7):
-    plt.figure(figsize=(w_size, h_size))
+def displot(df,x=None,title=None):
+    plt.figure(figsize=(12, 7))
     sn.displot(data=df, x=x)
     plt.title(title)
     plt.show()
