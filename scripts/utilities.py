@@ -4,9 +4,6 @@ import pandas as pd
 def format_float(value):
     return f'{value:,.2f}'
 
-def format_datetime(df,col_name):
-    df[col_name] = pd.to_datetime(df[col_name])
-    return df
 
 def format_numeric(df,col_name):
     df[col_name] = pd.to_numeric(df[col_name])
