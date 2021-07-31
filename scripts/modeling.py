@@ -67,7 +67,7 @@ def format_datetime(df):
 
 def prepare_model_input(df):
     df_y = df["Sales"]
-    df_X = df.drop(columns=["Sales"])
+    df_X = df.drop(columns=["Sales","Customers"])
     return df_X, df_y
 
 # prepare dataframe
@@ -86,7 +86,7 @@ def preprocess(df):
     # define which transformer applies to which columns
     impute_encode = ColumnTransformer([
         ('categorical_preprocessing', categorical_preprocessing, ['StateHoliday']),
-        ('numerical_preprocessing', numerical_preprocessing, ['Store', 'DayOfWeek','Customers', 'Open', 'Promo'
+        ('numerical_preprocessing', numerical_preprocessing, ['Store', 'DayOfWeek', 'Open', 'Promo'
             ,'SchoolHoliday'])
     ])
 
