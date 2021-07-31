@@ -14,6 +14,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error,mean_absolute_error
+import datetime
+import pickle
+
 
 import mlflow
 import mlflow.sklearn
@@ -114,6 +117,13 @@ def train_model(X,y,model):
 def inference_model(X,model):
     return model.predict(X)
 
+def get_time_now():
+    time =datetime.datetime.now()
+    time_list = [time.day,time.month,time.year,time.hour,time.minute,time.second]
+    time_now = "-".join(str(i) for i in time_list )
+    return time_now
+
+
 def ml_pipeline():
     
     mlflow.set_experiment('pharmaceutical')
@@ -158,6 +168,11 @@ def ml_pipeline():
         print("The score of the trained Linear regression model is ",score)
         mlflow.log_metric('Score of model', score)
         mlflow.log_metric('MAE of model', mae)
+        
+        model_name = get_time_now()
+        # save this dataframe to the database
+        pickle.dump(trained_model, open("models/"+model_name+".pkl", 'wb'))
+        print('Model Successfully Saved.!!!')
 
 if __name__ == "__main__":
     ml_pipeline()
