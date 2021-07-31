@@ -13,6 +13,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error,mean_absolute_error
+
 import mlflow
 import mlflow.sklearn
 import logging
@@ -44,6 +46,14 @@ class df_function_transformer():
 
     def fit(self, X, y=None, **fit_params):
         return self
+
+# handle outliers
+def handle_outliers(df):
+    sales_dec = df.quantile(0.10)
+    sales_qua = df.quantile(0.90)
+    df = np.where(df < sales_dec, sales_dec,df)
+    df = np.where(df >sales_qua, sales_qua,df)
+    return df
 
 # function to create more features from Date columns
 def get_features(df_train): 
@@ -131,7 +141,7 @@ def ml_pipeline():
         cols_y.to_csv('target.csv', header=False, index=False)
         mlflow.log_artifact('target.csv')
 
-        y = np.array(df_target)
+        y = np.array(handle_outliers(df_target))
         X = preprocess(df_features)
         # split into valid and training data
         X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=.3, random_state=12)
@@ -141,9 +151,13 @@ def ml_pipeline():
         trained_model = train_model(X_train,y_train,reg)
         #run models and store parameters
         score = trained_model.score(X_valid, y_valid)
+        y_pred_valid = inference_model(X_valid, y_valid)
+        mae = mean_absolute_error(y_valid, y_pred_valid)
+
+        print("The mean absolute error of our model is ",mae)
         print("The score of the trained Linear regression model is ",score)
         mlflow.log_metric('Score of model', score)
-
+        mlflow.log_metric('MAE of model', mae)
 
 if __name__ == "__main__":
     ml_pipeline()
