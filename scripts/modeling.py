@@ -70,21 +70,28 @@ def prepare_model_input(df):
     df_X = df.drop(columns=["Sales"])
     return df_X, df_y
 
+# prepare dataframe
+def prepare_df(df):
+    prepare_df_pipeline = Pipeline([
+        ("convert_Date_format", df_function_transformer(format_datetime)),
+        ("get features from Date",df_function_transformer(get_features)),
+        ])
+    return prepare_df_pipeline.fit_transform(df)
+
 # preprocess data
 def preprocess(df):
     categorical_preprocessing = Pipeline([('ohe', OneHotEncoder())])
     numerical_preprocessing = Pipeline([('imputation', SimpleImputer())])
 
     # define which transformer applies to which columns
-    preprocess = ColumnTransformer([
+    impute_encode = ColumnTransformer([
         ('categorical_preprocessing', categorical_preprocessing, ['StateHoliday']),
         ('numerical_preprocessing', numerical_preprocessing, ['Store', 'DayOfWeek','Customers', 'Open', 'Promo'
             ,'SchoolHoliday'])
     ])
+
     training_pipeline = Pipeline([
-        ("convert_Date_format", df_function_transformer(format_datetime)),
-        ("get features from Date",df_function_transformer(get_features)),
-        ("encode and impute", preprocess),
+        ("encode and impute", impute_encode),
         ("Scale",StandardScaler())
         
     ])
@@ -114,7 +121,7 @@ def ml_pipeline():
 
         # get features and target
         df_features,df_target = prepare_model_input(df_train)
-
+        df_features = prepare_df(df_features)
         #log artifacts: columns used for modeling
         cols_x = pd.DataFrame(list(df_features.columns))
         cols_x.to_csv('features.csv', header=False, index=False)
@@ -135,7 +142,7 @@ def ml_pipeline():
         #run models and store parameters
         score = trained_model.score(X_valid, y_valid)
         print("The score of the trained Linear regression model is ",score)
-        mlflow.log_param('Score of model', score)
+        mlflow.log_metric('Score of model', score)
 
 
 if __name__ == "__main__":
