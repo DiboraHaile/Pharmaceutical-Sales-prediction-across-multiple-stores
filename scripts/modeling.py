@@ -151,7 +151,7 @@ def ml_pipeline():
         trained_model = train_model(X_train,y_train,reg)
         #run models and store parameters
         score = trained_model.score(X_valid, y_valid)
-        y_pred_valid = inference_model(X_valid, y_valid)
+        y_pred_valid = inference_model(X_valid, trained_model)
         mae = mean_absolute_error(y_valid, y_pred_valid)
 
         print("The mean absolute error of our model is ",mae)
