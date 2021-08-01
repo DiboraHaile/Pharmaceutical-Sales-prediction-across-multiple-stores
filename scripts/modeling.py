@@ -72,8 +72,6 @@ def isholiday(x):
 
 # function to create more features from Date columns
 def get_features(df_train): 
-    # "Store","Date","IsHoliday","IsWeekend","IsPromo","Year","Part of the month"
-    # "Store","Sales","Customers","Open","Promo","StateHoliday","SchoolHoliday","Year","Part of the month","IsWeekend"
     # extracting numerical information from the date columns
     # the year
     df_train_copy = df_train.copy()
@@ -85,7 +83,7 @@ def get_features(df_train):
     # Is Weekend
     df_train_copy["IsWeekend"] = df_train_copy["DayOfWeek"].map(lambda x: isweekend(x))
     df_train_copy = df_train_copy.drop(columns=["Open","Date","DayOfWeek","StateHoliday","SchoolHoliday"])
-    return df_train_copy[["Store","Sales","Customers","IsHoliday","IsWeekend","Promo","Year","Part of the month"]]
+    return df_train_copy[["Store","IsHoliday","IsWeekend","Promo","Year","Part of the month"]]
     
 
 # function to convert to dataframe
@@ -112,14 +110,11 @@ def prepare_df(df):
 
 # preprocess data
 def preprocess(df):
-    categorical_preprocessing = Pipeline([('ohe', OneHotEncoder())])
     numerical_preprocessing = Pipeline([('imputation', SimpleImputer())])
 
     # define which transformer applies to which columns
     impute_encode = ColumnTransformer([
-        ('categorical_preprocessing', categorical_preprocessing, ['StateHoliday']),
-        ('numerical_preprocessing', numerical_preprocessing, ['Store', 'DayOfWeek', 'Open', 'Promo'
-            ,'SchoolHoliday'])
+        ('numerical_preprocessing', numerical_preprocessing, ["Store","IsHoliday","IsWeekend","Promo","Year","Part of the month"])
     ])
 
     training_pipeline = Pipeline([
