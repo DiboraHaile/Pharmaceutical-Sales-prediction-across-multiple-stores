@@ -35,7 +35,7 @@ class TestModelingFunc(unittest.TestCase):
 
     def test_get_features(self):
         df = modeling.format_datetime(self.df)
-        self.assertEqual(modeling.get_features(df).columns.tolist(),["Store","Sales","Customers","Open","Promo","StateHoliday","SchoolHoliday","Year","Part of the month","IsWeekend"])
+        self.assertEqual(modeling.get_features(df).columns.tolist(),["Store","Sales","Customers","IsHoliday","IsWeekend","Promo","Year","Part of the month"])
 
     
 
