@@ -4,10 +4,10 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join('./scripts')))
 import modeling
 
-df_train = pd.read_csv("data/train.csv")
+path = 'data/train.csv'
+version='trainV1'
 
-columns = ['created_at', 'source', 'original_text','clean_text', 'sentiment','polarity','subjectivity', 'lang', 'favorite_count', 'retweet_count', 
-    'original_author', 'screen_count', 'followers_count','friends_count','possibly_sensitive', 'hashtags', 'user_mentions', 'place', 'place_coord_boundaries']
+df_train,_ = modeling.load_versions(path,version)
 
 class TestModelingFunc(unittest.TestCase):
     """
@@ -35,7 +35,7 @@ class TestModelingFunc(unittest.TestCase):
 
     def test_get_features(self):
         df = modeling.format_datetime(self.df)
-        self.assertEqual(modeling.get_features(df).columns.tolist(),["Store","Sales","Customers","IsHoliday","IsWeekend","Promo","Year","Part of the month"])
+        self.assertEqual(modeling.get_features(df).columns.tolist(),["Store","IsHoliday","IsWeekend","Promo","Year","Part of the month"])
 
     
 
