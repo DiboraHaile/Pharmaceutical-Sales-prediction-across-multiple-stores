@@ -1,0 +1,15 @@
+artifact_uri: file:///home/dibora/Pharmaceutical-Sales-prediction-across-multiple-stores/mlruns/1/5d2e2b9bd3074130b99fb81da156289b/artifacts
+end_time: 1627852633788
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 5d2e2b9bd3074130b99fb81da156289b
+run_uuid: 5d2e2b9bd3074130b99fb81da156289b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1627852607095
+status: 3
+tags: []
+user_id: dibora
