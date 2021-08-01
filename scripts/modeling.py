@@ -58,18 +58,34 @@ def handle_outliers(df):
     df = np.where(df >sales_qua, sales_qua,df)
     return df
 
+def isweekend(number):
+    if number in range(1,6):
+        return 0
+    else:
+        return 1
+
+def isholiday(x):
+    if x == "0":
+        return 0
+    else:
+        return 1
+
 # function to create more features from Date columns
 def get_features(df_train): 
+    # "Store","Date","IsHoliday","IsWeekend","IsPromo","Year","Part of the month"
+    # "Store","Sales","Customers","Open","Promo","StateHoliday","SchoolHoliday","Year","Part of the month","IsWeekend"
     # extracting numerical information from the date columns
     # the year
     df_train_copy = df_train.copy()
+    df_train_copy["IsHoliday"] = df_train_copy["StateHoliday"].map(lambda x: isholiday(x))
     df_train_copy["Year"] = df_train_copy['Date'].dt.year
     # which part of the month it is where 0 is begining, 1 is mid and 2 is end
     df_train_copy["Part of the month"] = df_train_copy['Date'].dt.day.apply(lambda x: x // 10)
     df_train_copy.loc[(df_train_copy["Date"].dt.day == 31), "Part of the month"] = 2
-    df_train_copy = df_train_copy.drop(columns="Date")
-    # How many days before or after holidays
-    return df_train_copy
+    # Is Weekend
+    df_train_copy["IsWeekend"] = df_train_copy["DayOfWeek"].map(lambda x: isweekend(x))
+    df_train_copy = df_train_copy.drop(columns=["Open","Date","DayOfWeek","StateHoliday","SchoolHoliday"])
+    return df_train_copy[["Store","Sales","Customers","IsHoliday","IsWeekend","Promo","Year","Part of the month"]]
     
 
 # function to convert to dataframe
@@ -78,8 +94,11 @@ def format_datetime(df):
     return df
 
 
-def prepare_model_input(df):
-    df_y = df["Sales"]
+def prepare_model_input(df,sales=True):
+    if sales:
+        df_y = df["Sales"]
+    else:
+        df_y = df["Customers"]
     df_X = df.drop(columns=["Sales","Customers"])
     return df_X, df_y
 
@@ -104,8 +123,7 @@ def preprocess(df):
     ])
 
     training_pipeline = Pipeline([
-        ("encode and impute", impute_encode),
-        ("Scale",StandardScaler())
+        ("encode and impute", impute_encode)
         
     ])
     return training_pipeline.fit_transform(df)
